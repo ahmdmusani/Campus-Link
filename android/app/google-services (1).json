@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "408734344858",
+    "project_id": "noteapp2407b1-72006",
+    "storage_bucket": "noteapp2407b1-72006.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408734344858:android:867d012435438f21bae123",
+        "android_client_info": {
+          "package_name": "com.compnay.campuslink"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcWuIO_9Ygfpsx7V68-Z4tjW57hSiwMwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408734344858:android:9c7ad4f3fce04dbcbae123",
+        "android_client_info": {
+          "package_name": "com.example.my_firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcWuIO_9Ygfpsx7V68-Z4tjW57hSiwMwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408734344858:android:97d7ccd5658094f8bae123",
+        "android_client_info": {
+          "package_name": "com.example.my_note_app_2407B1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcWuIO_9Ygfpsx7V68-Z4tjW57hSiwMwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

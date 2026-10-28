@@ -1,0 +1,119 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function: Authenticated check
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper function: Document owner check
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Helper function: Admin authorization check
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
+    }
+
+    // 1. Collection: users (Prevents role privilege escalation)
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isOwner(userId)
+        && (!request.resource.data.keys().hasAny(['role']) || request.resource.data.role != 'admin')
+        && (!request.resource.data.keys().hasAny(['isAdmin']) || request.resource.data.isAdmin != true);
+      allow update: if (isOwner(userId)
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'isAdmin']))
+      ) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // 2. Collection: rides
+    match /rides/{rideId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.driverId == request.auth.uid;
+      allow update: if (isAuthenticated() && resource.data.driverId == request.auth.uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // 3. Collection: ride_requests
+    match /ride_requests/{requestId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.passengerId == request.auth.uid;
+      allow update: if isAuthenticated() && (
+        resource.data.passengerId == request.auth.uid ||
+        resource.data.driverId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 4. Collection: ride_participants
+    match /ride_participants/{participantId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+
+    // 5. Collection: driver_locations
+    match /driver_locations/{rideId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && (
+        request.resource.data.driverId == request.auth.uid ||
+        resource.data.driverId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // 6. Collection: ride_history (Immutable archives)
+    match /ride_history/{historyId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if false;
+    }
+
+    // 7. Collection: ratings (Immutable rating records)
+    match /ratings/{ratingId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.fromUserId == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // 8. Collection: notifications
+    match /notifications/{notificationId} {
+      allow read, update: if isAuthenticated() && resource.data.receiverId == request.auth.uid;
+      allow create: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+
+    // 9. Collection: wallets
+    match /wallets/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create, update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+
+    // 10. Collection: wallet_transactions (Immutable audit logs)
+    match /wallet_transactions/{txId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated();
+      allow update, delete: if false;
+    }
+
+    // 11. Collection: complaints
+    match /complaints/{complaintId} {
+      allow read: if isAuthenticated() && (resource.data.reporterId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && request.resource.data.reporterId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    // 12. Collection: admin_audit_logs (Strictly Admin Access Only)
+    match /admin_audit_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

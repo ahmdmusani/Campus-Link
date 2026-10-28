@@ -1,0 +1,36 @@
+name: campus_link
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.8
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_screenutil: ^5.9.0
+  cupertino_icons: ^1.0.8
+  fl_chart: ^1.2.0
+  device_preview: ^1.3.1
+  firebase_core: ^4.9.0
+  firebase_auth: ^6.5.1
+  cloud_firestore: ^6.4.1
+  shimmer: ^3.0.0
+  google_fonts: ^8.1.0
+  google_maps_flutter: ^2.17.0
+  flutter_map: ^8.3.0
+  latlong2: ^0.10.1
+  http: ^1.6.0
+
+# Yeh hissa zaroori hai taake flutter_map naye version ko na rokay
+dependency_overrides:
+  latlong2: ^0.10.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

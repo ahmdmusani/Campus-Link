@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "440700735935",
+    "project_id": "campus-link-3f13d",
+    "storage_bucket": "campus-link-3f13d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:440700735935:android:8ec9f3b4bed07ffbbf510a",
+        "android_client_info": {
+          "package_name": "com.example.campus_link"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVlEMr5hox9mW9JNLTAmwxEoCYOoecYMw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
